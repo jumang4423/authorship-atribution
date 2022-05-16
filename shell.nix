@@ -1,5 +1,5 @@
 with import <nixpkgs> {};
 
-( pkgs.python35.buildEnv.override  {
+( pkgs.python3.buildEnv.override  {
 extraLibs = with pkgs.python35Packages; [ numpy toolz ];
 }).envcl
