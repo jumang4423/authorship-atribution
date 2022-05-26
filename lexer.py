@@ -3,32 +3,36 @@
 from result import Ok, Result
 
 
+# remove unnecessary chars
+def remove_char_from_word(word_list: list[str]) -> list[str]:
+    new_word_list: list[str] = []
+    for word in word_list:
+        word = word.replace("\n", "")
+        word = word.replace(".", "")
+        word = word.replace(",", "")
+        word = word.replace("!", "")
+        word = word.replace("?", "")
+        word = word.replace(";", "")
+        word = word.replace(":", "")
+        word = word.replace("(", "")
+        word = word.replace(")", "")
+        word = word.replace("[", "")
+        word = word.replace("]", "")
+        word = word.replace("{", "")
+        word = word.replace("}", "")
+        # upper case to lower case
+        word = word.lower()
+        new_word_list.append(word)
+
+    return new_word_list
+
+
 def split_by_whitespace(documents: list[str]) -> Result[list, str]:
     # split by whitespace
     wordArray: list[str] = []
     for document in documents:
-        # remove unnecessary chars
-        for word in document.split():
-            word = word.replace("\n", "")
-            word = word.replace(".", "")
-            word = word.replace(",", "")
-            word = word.replace("!", "")
-            word = word.replace("?", "")
-            word = word.replace(";", "")
-            word = word.replace(":", "")
-            word = word.replace("-", "")
-            word = word.replace("(", "")
-            word = word.replace(")", "")
-            word = word.replace("[", "")
-            word = word.replace("]", "")
-            word = word.replace("{", "")
-            word = word.replace("}", "")
-            word = word.replace("'", "")
-            word = word.replace("\"", "")
-            word = word.replace("‚", "")
-            word = word.replace("-", "")
-            # upper case to lower case
-            word = word.lower()
+        filtered_word_list = remove_char_from_word(document.split())
+        for word in filtered_word_list:
             wordArray.append(word)
     return Ok(wordArray)
 

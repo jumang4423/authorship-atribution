@@ -1,0 +1,5 @@
+datasets_path: ./datasets/
+test_data:
+  file_path: ./test_data/ToddNissen/29731newsML.txt
+  file_name: 29731newsML.txt
+  author_name: ToddNissen

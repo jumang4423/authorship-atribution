@@ -21,6 +21,15 @@ def load_data(path) -> Result[list, str]:
     return Ok(datasets)
 
 
+# return a list of object
+def load_data_from_path(path) -> Result[str, str]:
+    try:
+        with open(path, 'r') as f:
+            return Ok(f.read())
+    except:
+        return Err("Error: cannot load data from the file system")
+
+
 def loaded_datasets_to_list_of_name(loaded_datasets) -> Result[list, str]:
     list_of_name = list(map(lambda x: x["name"], loaded_datasets))
     return Ok(list_of_name)
