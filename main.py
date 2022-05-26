@@ -1,9 +1,3 @@
-# Problem, is to identify the actual author of a text from ten candidate authors Write a program that measures the
-# cosine similarity (or another measure) for the training set and then uses the result to identify the author of the
-# test set. The program should provide numerical results for all TEN test sets against all TEN authors. Finally,
-# the program names the most likely author for each test set. This may be in the form of a probability statement,
-# e.g. XXX is most likely the author (90%).
-
 import file_loader
 import yaml
 from result import Ok, Result, Err
@@ -51,7 +45,6 @@ def main():
     settings_obj = config_loader().unwrap()
     datasets_path = settings_obj['datasets_path']
     test_data_path = settings_obj['test_data']['file_path']
-    test_author_name = settings_obj['test_data']['author_name']
 
     # load text
     trained_data_list_dict = prepare_training_arr_dict(datasets_path).unwrap()
@@ -61,16 +54,24 @@ def main():
     cosine_similarity_list_dict = []
     for author_dict in trained_data_list_dict:
         cosine_similarity_list_dict.append({'name': author_dict['name'],
-                                            'cosine_similarity': parser.cosine_similarity(author_dict['dict'],
-                                                                                          test_data_dict).unwrap()})
+                                            'cosine_similarity': parser.cosine_similarity(test_data_dict, author_dict['dict']
+                                                                                          ).unwrap()})
 
     # sort by cosine similarity
     sorted_cosine_similarity_list_dict = sorted(cosine_similarity_list_dict, key=lambda k: k['cosine_similarity'],
                                                 reverse=True)
 
-    # print result who is most likely
-    print("-o expected author: " + test_author_name)
-    print("-o most likely author: " + sorted_cosine_similarity_list_dict[0]['name'])
+    # print result
+
+    print("\n+++\n")
+    print("-o input file: " + test_data_path)
+    print("\n+++\n")
+    counter = 1
+    for author_dict in sorted_cosine_similarity_list_dict:
+        print(str(counter) + ". " + author_dict['name'] + ': ' + str(author_dict['cosine_similarity']))
+        counter += 1
+
+    print("\n+++\n")
 
 
 if __name__ == '__main__':
