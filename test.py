@@ -8,6 +8,7 @@ import lexer, parser
 # variables for caching
 trained_data_list_dict = []
 dict_array = []
+config_file_path = "./config.yml"
 
 
 def gen_cached_trained_data(datasets_path: str):
@@ -46,8 +47,9 @@ def prepare_test_dict(testFilePath: str) -> Result[dict, str]:
 
 
 def config_loader() -> Result[dict, str]:
+    global config_file_path
     try:
-        with open('config.yml', 'r') as file:
+        with open(config_file_path, 'r') as file:
             return Ok(yaml.load(file, Loader=yaml.FullLoader))
     except Exception as e:
         return Err(str(e))
@@ -85,6 +87,11 @@ def main():
     test_data_path = settings_obj['test_data_dir']
 
     # predict
+    print()
+    print("-o test_data_path: " + test_data_path)
+    print()
+
+
     # get all files
     test_count = 0
     coverage_count = 0
@@ -100,11 +107,11 @@ def main():
                 coverage_count += 1
 
             # print result
-            print(str(int(test_count/file_number * 100)) + "%:\t" + str(result_dict))
+            print(str(int(test_count / file_number * 100)) + "%:\t" + str(result_dict))
 
     # print coverage
     print()
-    print("-o coverage: " + str((coverage_count / test_count) * 100) + "%")
+    print("-o test coverage: " + str((coverage_count / test_count) * 100) + "%")
     print()
 
 
