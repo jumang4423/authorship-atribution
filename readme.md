@@ -28,17 +28,28 @@ Parse the word split by whitespace, and then count each word into python array o
 ```bash
 # this reads shell.nix and resolves it
 nix-shell
+make install
 ```
 
 - generic cli
   - install python3 and make. yes
+  - ```make install```
 
-### 2. excution or testing
 
-- install python3 dependencies(*  when u dont use nix)
+- docker
 ```bash
+docker compose up -d
+docker compose exec el331 bash
 make install
 ```
+
+- if you want out, just enter:
+```bash
+# this code stop docker container (called el331)
+exit docker compose down
+- ```
+
+### 2. excution or testing
 
 - edit condig.yaml
 
