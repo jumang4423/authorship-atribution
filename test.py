@@ -74,7 +74,7 @@ def predict_test(datasets_path: str, test_data_path: str) -> dict:
     return {
         'input_file': test_data_path,
         'predicted_author': predicted_author['name'],
-        'is_correct': predicted_author['name'] in test_data_path
+        'is_prediction_correct': predicted_author['name'] in test_data_path
     }
 
 
@@ -88,12 +88,7 @@ def main():
     # get all files
     test_count = 0
     coverage_count = 0
-    file_number = 0
-
-    # check file number test_data_path
-    for file in os.listdir(test_data_path):
-        if file.endswith(".txt"):
-            file_number += 1
+    file_number = file_loader.get_file_number(test_data_path)
 
     for root, dirs, files in os.walk(test_data_path):
         for file in files:
@@ -105,7 +100,7 @@ def main():
                 coverage_count += 1
 
             # print result
-            print(result_dict)
+            print(str(int(test_count/file_number * 100)) + "%:\t" + str(result_dict))
 
     # print coverage
     print()
