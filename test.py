@@ -7,16 +7,13 @@ import lexer, parser
 
 # variables for caching
 trained_data_list_dict = []
-dict_array = []
 config_file_path = "./config.yml"
 
 
 # gen trained data
 def gen_cached_trained_data(datasets_path: str):
-    global trained_data_list_dict, dict_array
+    global trained_data_list_dict
     trained_data_list_dict = prepare_training_arr_dict(datasets_path).unwrap()
-    for trained_data_dict in trained_data_list_dict:
-        dict_array.append(trained_data_dict['dict'])
 
 
 # Result<Array<{name: string, dict: {string: float}}>>
@@ -69,7 +66,7 @@ def predict_test(datasets_path: str, test_data_path: str) -> dict:
     cosine_similarity_list_dict = []
     for author_dict in trained_data_list_dict:
         cosine_similarity_list_dict.append({'name': author_dict['name'],
-                                            'cosine_similarity': parser.cosine_similarity(dict_array,
+                                            'cosine_similarity': parser.cosine_similarity(
                                                                                           author_dict['dict'],
                                                                                           test_data_dict).unwrap()})
     # find max cosine similarity

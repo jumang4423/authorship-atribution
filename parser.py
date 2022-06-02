@@ -20,25 +20,18 @@ def list_of_keys_merged(training_dicts: list[dict], test_dict: dict) -> Result[l
 
 
 # returns a list of keys from a dictionary
-def cosine_similarity(trained_dicts: list[dict], train_dict: dict,  test_dict: dict) -> Result[float, str]:
-    list_of_keys: list[str] = list_of_keys_merged(trained_dicts, test_dict).unwrap()
-
-    if len(list_of_keys) == 0:
-        return Result.err("List of keys is empty")
+def cosine_similarity(train_dict: dict,  test_dict: dict) -> Result[float, str]:
     d1_count_list: list[float] = []
     d2_count_list: list[float] = []
 
     # calculating the count of each word in the training dictionary
-    for key in list_of_keys:
-        if key in train_dict:
-            d1_count_list.append(train_dict[key])
-        else:
-            d1_count_list.append(0)
-
+    for key in test_dict.keys():
         if key in test_dict:
-            d2_count_list.append(test_dict[key])
-        else:
-            d2_count_list.append(0)
+            d1_count_list.append(test_dict[key])
+            if key in train_dict:
+                d2_count_list.append(train_dict[key])
+            else:
+                d2_count_list.append(0)
 
     # calculating cosine similarity
     return Ok(np.dot(d1_count_list, d2_count_list) / (np.linalg.norm(d1_count_list) * np.linalg.norm(d2_count_list)))
