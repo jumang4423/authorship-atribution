@@ -88,6 +88,7 @@ def main():
 
     # predict
     print()
+    print("-o dataset_path: " + datasets_path)
     print("-o test_data_path: " + test_data_path)
     print()
 
