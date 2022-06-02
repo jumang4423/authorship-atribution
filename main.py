@@ -52,17 +52,18 @@ def main():
 
     # calculate cosine similarity
     cosine_similarity_list_dict = []
+    dict_array = []
+    for trained_data_dict in trained_data_list_dict:
+        dict_array.append(trained_data_dict['dict'])
     for author_dict in trained_data_list_dict:
         cosine_similarity_list_dict.append({'name': author_dict['name'],
-                                            'cosine_similarity': parser.cosine_similarity(test_data_dict, author_dict['dict']
-                                                                                          ).unwrap()})
+                                            'cosine_similarity': parser.cosine_similarity(dict_array, author_dict['dict'], test_data_dict).unwrap()})
 
     # sort by cosine similarity
     sorted_cosine_similarity_list_dict = sorted(cosine_similarity_list_dict, key=lambda k: k['cosine_similarity'],
                                                 reverse=True)
 
     # print result
-
     print("\n+++\n")
     print("-o input file: " + test_data_path)
     print("\n+++\n")

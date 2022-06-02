@@ -44,8 +44,6 @@ def gen_dict_from_word_list(word_list: list[str]) -> dict:
             word_dict[word] += 1
         else:
             word_dict[word] = 1
-    for key, value in word_dict.items():
-        word_dict[key] = value / len(word_list)
     return word_dict
 
 

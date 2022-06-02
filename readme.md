@@ -40,6 +40,8 @@ nix-shell
 make install
 ```
 
+- edit condig.yaml
+
 - run test
 ```bash
 make run

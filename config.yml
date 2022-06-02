@@ -1,3 +1,6 @@
+# all training data sets
 datasets_path: ./datasets/
+
+# path to test data (EDIT HERE)
 test_data:
-  file_path: ./test_data/JoWinterbottom/240421newsML.txt
+  file_path: ./test_data/AaronPressman/43033newsML.txt
