@@ -28,7 +28,6 @@ Parse the word split by whitespace, and then count each word into python array o
 ```bash
 # this reads shell.nix and resolves it
 nix-shell
-make install
 ```
 
 - generic cli
@@ -40,10 +39,9 @@ make install
 ```bash
 docker compose up -d
 docker compose exec el331 bash
-make install
 ```
 
-- if you want out, just enter:
+- ...if you want out, just enter:
 ```bash
 exit
 # this code stop docker container (called el331) 
@@ -56,5 +54,5 @@ docker compose down
 
 - run test
 ```bash
-make test
+make install test
 ```
