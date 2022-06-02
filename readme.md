@@ -1,6 +1,4 @@
-team k
-
-==
+## team k
 
 s1270174 ryoma okuda
 
@@ -10,19 +8,12 @@ s1270205 Shuto Hamaguchi
 
 # = Authorship Attribution
 
-## pusuedo
-
-1. Download the dataset from the specified url.
-2. The dataset has random texts written by 50 authors.
-We need to select 10 authors
-3. 10% of text is for text cases, another 90% is for training data.
-Parse the word split by whitespace, and then count each word into python array of dictionary type.
-
-4. Calculate the cosine similarity of test data and trained data using numpy(especially .dot and .norm functions)
-5. The highest score of the cosine similarity will be the answer.
-
 ## resolve dev dependencies
-### 1. to run this project, you need to install python3 and some dependencies.
+
+- general environment
+  
+  install python3 and make
+
 
 - nix
 ```bash
@@ -30,29 +21,27 @@ Parse the word split by whitespace, and then count each word into python array o
 nix-shell
 ```
 
-- generic cli
-  - install python3 and make. yes
-  - ```make install```
-
 
 - docker
 ```bash
+# this start a docker container
 docker compose up -d
 docker compose exec el331 bash
-```
 
-- ...if you want out, just enter:
-```bash
+# if you want exit from docker... so
 exit
 # this code stop docker container (called el331) 
 docker compose down
 ```
 
-### 2. excution or testing
-
-- check config.yml
-
-- run test
+## program execution
+- to test the coverage of predict correctness of the program
 ```bash
 make install test
+```
+
+
+- to predict who write a given text by pipeline
+```bash
+cat datasets/test_data/AaronPressman/43033newsML.txt | make install run
 ```

@@ -1,13 +1,10 @@
 # libs
-import os
-import file_loader
 import yaml
 from result import Ok, Result, Err
-import lexer, parser
+from src import lexer, parser, file_loader
 
 # variables for caching
 trained_data_list_dict = []
-config_file_path = "./config.yml"
 
 
 # gen trained data
@@ -45,6 +42,14 @@ def prepare_test_dict(testFilePath: str) -> Result[dict, str]:
     return Ok(new_dict)
 
 
+def prepare_test_dict_from_text(test_data_str: str) -> Result[dict, str]:
+    # lexical analysis
+    new_word_list: list[str] = lexer.remove_char_from_word(test_data_str.split())
+    new_dict = lexer.gen_dict_from_word_list(new_word_list)
+
+    return Ok(new_dict)
+
+
 # load config file
 def config_loader(config_path) -> Result[dict, str]:
     try:
@@ -67,8 +72,8 @@ def predict_test(datasets_path: str, test_data_path: str) -> dict:
     for author_dict in trained_data_list_dict:
         cosine_similarity_list_dict.append({'name': author_dict['name'],
                                             'cosine_similarity': parser.cosine_similarity(
-                                                                                          author_dict['dict'],
-                                                                                          test_data_dict).unwrap()})
+                                                author_dict['dict'],
+                                                test_data_dict).unwrap()})
     # find max cosine similarity
     predicted_author = max(cosine_similarity_list_dict, key=lambda k: k['cosine_similarity'])
 
@@ -80,41 +85,22 @@ def predict_test(datasets_path: str, test_data_path: str) -> dict:
     }
 
 
-def main():
-    # load settings
-    settings_obj = config_loader(config_file_path).unwrap()
-    datasets_path = settings_obj['datasets_path']
-    test_data_path = settings_obj['test_data_dir']
+def predict_test_from_text(datasets_path: str, plaintext: str) -> dict:
+    if len(trained_data_list_dict) == 0:
+        gen_cached_trained_data(datasets_path)
 
-    # predict
-    print()
-    print("-o dataset_path: " + datasets_path)
-    print("-o test_data_path: " + test_data_path)
-    print()
+    # load text
+    test_data_dict = prepare_test_dict_from_text(plaintext).unwrap()
 
-    # get all files
-    test_count = 0
-    coverage_count = 0
-    file_number = file_loader.get_file_number(test_data_path)
+    # calculate cosine similarity
+    cosine_similarity_list_dict = []
+    for author_dict in trained_data_list_dict:
+        cosine_similarity_list_dict.append({'name': author_dict['name'],
+                                            'cosine_similarity': parser.cosine_similarity(
+                                                author_dict['dict'],
+                                                test_data_dict).unwrap()})
+    # find max cosine similarity
+    predicted_author = max(cosine_similarity_list_dict, key=lambda k: k['cosine_similarity'])
 
-    # predict every test file
-    for root, dirs, files in os.walk(test_data_path):
-        for file in files:
-            result_dict = predict_test(datasets_path, os.path.join(root, file))
-            test_count += 1
-
-            # if input_file includes most_similar_author, coverage_count + 1
-            if result_dict['predicted_author'] in result_dict['input_file']:
-                coverage_count += 1
-
-            # print result
-            print(str(int(test_count / file_number * 100)) + "%:\t" + str(result_dict))
-
-    # print coverage
-    print()
-    print("-o test coverage: " + str((coverage_count / test_count) * 100) + "%")
-    print()
-
-
-if __name__ == '__main__':
-    main()
+    # result object
+    return predicted_author['name']
