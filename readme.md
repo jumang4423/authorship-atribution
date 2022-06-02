@@ -55,5 +55,5 @@ exit docker compose down
 
 - run test
 ```bash
-make run
+make test
 ```

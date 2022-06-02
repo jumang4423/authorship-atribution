@@ -1,6 +1,6 @@
 install:
 	pip3 install -r requirements.txt
 
-# load both training data and test data and check authorship attribution is working
-run:
-	python3 main.py
+# show coverage of correctness
+test:
+	python3 test.py

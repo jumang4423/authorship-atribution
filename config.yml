@@ -2,5 +2,4 @@
 datasets_path: ./datasets/
 
 # path to test data (EDIT HERE)
-test_data:
-  file_path: ./test_data/AaronPressman/43033newsML.txt
+test_data_dir: ./test_data/
