@@ -1,27 +1,40 @@
 # for lexing the input file
+import os
 
 from result import Ok, Result
 
 
-# remove unnecessary chars
-def remove_char_from_word(word_list: list[str]) -> list[str]:
-    new_word_list: list[str] = []
-    for word in word_list:
-        # upper case to lower case
-        word = word.replace(".", "").replace(",", "").replace("!", "").replace("?", "").replace("'", "").replace("-", "").replace("(", "").replace(")", "").replace(";", "").replace(":", "").replace("\"", "").replace("/", "").replace("\\", "").replace("*", "").replace("&", "").replace("#", "").replace("$", "").replace("%", "").replace("^", "").replace("_", "").replace("`", "").replace("~", "").replace("<", "").replace(">", "").replace("=", "").replace("+", "").replace("@", "").replace("|", "").replace("{", "").replace("}", "").replace("[", "").replace("]", "").replace("\n", "").replace("\t", "").replace("\r", "").replace(" ", "").lower()
-        new_word_list.append(word)
+def lexical_analysis(documents) -> Result[list, str]:
+    # split by whitespace
+    wordArray: list[str] = split_by_whitespace(documents).unwrap()
+    # add to the dict with count
+    word_dict: dict = gen_dict_from_word_list(wordArray)
 
-    return new_word_list
+    return Ok(word_dict)
 
 
 def split_by_whitespace(documents: list[str]) -> Result[list, str]:
     # split by whitespace
     wordArray: list[str] = []
     for document in documents:
-        filtered_word_list = remove_char_from_word(document.split())
+        filtered_word_list = str_clearner(document)
         for word in filtered_word_list:
             wordArray.append(word)
     return Ok(wordArray)
+
+
+def str_clearner(doc_str: str) -> list[str]:
+    doc_str = doc_str \
+        .replace("$", "@") \
+        .replace("-", "@") \
+        .replace("\"", "@") \
+        .replace("\n", "@") \
+        .replace(".", "@") \
+        .replace(" ", "@") \
+        .replace("@@", "@") \
+        .lower()
+
+    return doc_str.split("@")
 
 
 def gen_dict_from_word_list(word_list: list[str]) -> dict:
@@ -32,12 +45,3 @@ def gen_dict_from_word_list(word_list: list[str]) -> dict:
         else:
             word_dict[word] = 1
     return word_dict
-
-
-def lexical_analysis(documents) -> Result[list, str]:
-    # split by whitespace
-    wordArray: list[str] = split_by_whitespace(documents).unwrap()
-    # add to the dict with count
-    word_dict: dict = gen_dict_from_word_list(wordArray)
-
-    return Ok(word_dict)

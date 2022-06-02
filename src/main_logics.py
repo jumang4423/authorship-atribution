@@ -7,7 +7,7 @@ from src import lexer, parser, file_loader
 trained_data_list_dict = []
 
 
-# gen trained data
+# generate trained data
 def gen_cached_trained_data(datasets_path: str):
     global trained_data_list_dict
     trained_data_list_dict = prepare_training_arr_dict(datasets_path).unwrap()
@@ -20,7 +20,6 @@ def prepare_training_arr_dict(datasets_path_str: str) -> Result[list[dict], str]
 
     # lexical analysis
     input_authors_dict: list[dict] = []
-
     for dataset in input_dataset_list:
         new_dict = lexer.lexical_analysis(dataset['documents']).unwrap()
         new_author_dict = ({'name': dataset["name"], 'dict': new_dict})
@@ -36,7 +35,7 @@ def prepare_test_dict(testFilePath: str) -> Result[dict, str]:
     test_data_str = file_loader.load_data_from_path(testFilePath).unwrap()
 
     # lexical analysis
-    new_word_list: list[str] = lexer.remove_char_from_word(test_data_str.split())
+    new_word_list: list[str] = lexer.str_clearner(test_data_str)
     new_dict = lexer.gen_dict_from_word_list(new_word_list)
 
     return Ok(new_dict)
@@ -44,7 +43,7 @@ def prepare_test_dict(testFilePath: str) -> Result[dict, str]:
 
 def prepare_test_dict_from_text(test_data_str: str) -> Result[dict, str]:
     # lexical analysis
-    new_word_list: list[str] = lexer.remove_char_from_word(test_data_str.split())
+    new_word_list: list[str] = lexer.str_clearner(test_data_str)
     new_dict = lexer.gen_dict_from_word_list(new_word_list)
 
     return Ok(new_dict)
@@ -79,13 +78,13 @@ def predict_test(datasets_path: str, test_data_path: str) -> dict:
 
     # result object
     return {
-        'input_file': test_data_path,
-        'predicted_author': predicted_author['name'],
-        'is_prediction_correct': predicted_author['name'] in test_data_path
+        'input': test_data_path,
+        'pred_author': predicted_author['name'],
+        'is_pred_ok': predicted_author['name'] in test_data_path
     }
 
 
-def predict_test_from_text(datasets_path: str, plaintext: str) -> dict:
+def predict_test_from_text(datasets_path: str, plaintext: str) -> str:
     if len(trained_data_list_dict) == 0:
         gen_cached_trained_data(datasets_path)
 

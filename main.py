@@ -10,7 +10,10 @@ def main():
     # load settings
     settings_obj = main_logics.config_loader(config_file_path).unwrap()
     datasets_path = settings_obj['datasets_path']
-    print(main_logics.predict_test_from_text(datasets_path, input()))
+
+    # print the prediction
+    input_doc = input()
+    print(main_logics.predict_test_from_text(datasets_path, input_doc))
 
 
 if __name__ == '__main__':
