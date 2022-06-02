@@ -45,9 +45,10 @@ make install
 
 - if you want out, just enter:
 ```bash
-# this code stop docker container (called el331)
-exit docker compose down
-- ```
+exit
+# this code stop docker container (called el331) 
+docker compose down
+```
 
 ### 2. excution or testing
 
