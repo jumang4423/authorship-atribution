@@ -91,7 +91,6 @@ def main():
     print("-o test_data_path: " + test_data_path)
     print()
 
-
     # get all files
     test_count = 0
     coverage_count = 0

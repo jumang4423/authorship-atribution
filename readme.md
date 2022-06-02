@@ -52,7 +52,7 @@ docker compose down
 
 ### 2. excution or testing
 
-- edit condig.yaml
+- check config.yml
 
 - run test
 ```bash

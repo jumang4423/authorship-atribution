@@ -1,5 +1,5 @@
 # all training data sets
 datasets_path: ./datasets/
 
-# path to test data (EDIT HERE)
+# path to test data
 test_data_dir: ./test_data/
