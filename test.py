@@ -1,5 +1,5 @@
+# libs
 import os
-
 import file_loader
 import yaml
 from result import Ok, Result, Err
@@ -11,6 +11,7 @@ dict_array = []
 config_file_path = "./config.yml"
 
 
+# gen trained data
 def gen_cached_trained_data(datasets_path: str):
     global trained_data_list_dict, dict_array
     trained_data_list_dict = prepare_training_arr_dict(datasets_path).unwrap()
@@ -29,6 +30,7 @@ def prepare_training_arr_dict(datasets_path_str: str) -> Result[list[dict], str]
     for dataset in input_dataset_list:
         new_dict = lexer.lexical_analysis(dataset['documents']).unwrap()
         new_author_dict = ({'name': dataset["name"], 'dict': new_dict})
+        # every author has different dict(mapping from word to frequency)
         input_authors_dict.append(new_author_dict)
 
     return Ok(input_authors_dict)
@@ -46,16 +48,17 @@ def prepare_test_dict(testFilePath: str) -> Result[dict, str]:
     return Ok(new_dict)
 
 
-def config_loader() -> Result[dict, str]:
-    global config_file_path
+# load config file
+def config_loader(config_path) -> Result[dict, str]:
     try:
-        with open(config_file_path, 'r') as file:
+        with open(config_path, 'r') as file:
             return Ok(yaml.load(file, Loader=yaml.FullLoader))
     except Exception as e:
         return Err(str(e))
 
 
 def predict_test(datasets_path: str, test_data_path: str) -> dict:
+    # load trained data but only once
     if len(trained_data_list_dict) == 0:
         gen_cached_trained_data(datasets_path)
 
@@ -69,10 +72,10 @@ def predict_test(datasets_path: str, test_data_path: str) -> dict:
                                             'cosine_similarity': parser.cosine_similarity(dict_array,
                                                                                           author_dict['dict'],
                                                                                           test_data_dict).unwrap()})
-
     # find max cosine similarity
     predicted_author = max(cosine_similarity_list_dict, key=lambda k: k['cosine_similarity'])
 
+    # result object
     return {
         'input_file': test_data_path,
         'predicted_author': predicted_author['name'],
@@ -82,7 +85,7 @@ def predict_test(datasets_path: str, test_data_path: str) -> dict:
 
 def main():
     # load settings
-    settings_obj = config_loader().unwrap()
+    settings_obj = config_loader(config_file_path).unwrap()
     datasets_path = settings_obj['datasets_path']
     test_data_path = settings_obj['test_data_dir']
 
@@ -97,6 +100,7 @@ def main():
     coverage_count = 0
     file_number = file_loader.get_file_number(test_data_path)
 
+    # predict every test file
     for root, dirs, files in os.walk(test_data_path):
         for file in files:
             result_dict = predict_test(datasets_path, os.path.join(root, file))

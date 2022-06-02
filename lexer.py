@@ -7,19 +7,8 @@ from result import Ok, Result
 def remove_char_from_word(word_list: list[str]) -> list[str]:
     new_word_list: list[str] = []
     for word in word_list:
-        word = word.replace("\n", "")
-        word = word.replace(".", "")
-        word = word.replace(",", "")
-        word = word.replace(";", "")
-        word = word.replace(":", "")
-        word = word.replace("(", "")
-        word = word.replace(")", "")
-        word = word.replace("[", "")
-        word = word.replace("]", "")
-        word = word.replace("{", "")
-        word = word.replace("}", "")
         # upper case to lower case
-        word = word.lower()
+        word = word.replace(".", "").replace(",", "").replace("!", "").replace("?", "").replace("'", "").replace("-", "").replace("(", "").replace(")", "").replace(";", "").replace(":", "").replace("\"", "").replace("/", "").replace("\\", "").replace("*", "").replace("&", "").replace("#", "").replace("$", "").replace("%", "").replace("^", "").replace("_", "").replace("`", "").replace("~", "").replace("<", "").replace(">", "").replace("=", "").replace("+", "").replace("@", "").replace("|", "").replace("{", "").replace("}", "").replace("[", "").replace("]", "").replace("\n", "").replace("\t", "").replace("\r", "").replace(" ", "").lower()
         new_word_list.append(word)
 
     return new_word_list
